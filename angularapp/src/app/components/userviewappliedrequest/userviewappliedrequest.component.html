@@ -1,0 +1,38 @@
+<div class="container mt-4">
+  <h3>Applied Class Requests</h3>
+  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search by Class Name" [(ngModel)]="searchText" (input)="filter()">
+  </div>
+  <table class="table table-bordered" *ngIf="filteredRequests.length > 0; else noData">
+    <thead>
+      <tr>
+        <th>Class Name</th>
+        <th>Request Date</th>
+        <th>Status</th>
+        <th>Dietary Preferences</th>
+        <th>Cooking Goals</th>
+        <th>Comments</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let r of filteredRequests">
+        <td>{{r.className}}</td>
+        <td>{{r.RequestDate | date}}</td>
+        <td>{{r.Status}}</td>
+        <td>{{r.DietaryPreferences}}</td>
+        <td>{{r.CookingGoals}}</td>
+        <td>{{r.Comments}}</td>
+        <td>
+          <button class="btn btn-sm btn-danger"
+            [disabled]="isDisabled(r.status)"
+            [ngClass]="{'btn-secondary': isDisabled(r.status)}"
+            (click)="deleteRequest(r.CookingClassRequestId)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <ng-template #noData>
+    <p class="text-muted">Oops! No records found</p>
+  </ng-template>
+</div>

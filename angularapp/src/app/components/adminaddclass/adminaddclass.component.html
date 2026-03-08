@@ -1,0 +1,76 @@
+<div class="container mt-4">
+    <h3>Create New Cooking Class</h3>
+    <form [formGroup]="classForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>Class Name</label>
+          <input type="text" class="form-control" formControlName="ClassName">
+          <div *ngIf="classForm.get('ClassName')?.invalid && classForm.get('ClassName')?.touched" class="text-danger">
+            Class Name is required
+          </div>
+        </div>
+        <div class="form-group col-md-6">
+          <label>Cuisine Type</label>
+          <input type="text" class="form-control" formControlName="CuisineType">
+          <div *ngIf="classForm.get('CuisineType')?.invalid && classForm.get('CuisineType')?.touched" class="text-danger">
+            Cuisine Type is required
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>Chef Name</label>
+          <input type="text" class="form-control" formControlName="ChefName">
+          <div *ngIf="classForm.get('ChefName')?.invalid && classForm.get('ChefName')?.touched" class="text-danger">
+            Chef Name is required
+          </div>
+        </div>
+        <div class="form-group col-md-6">
+          <label>Location</label>
+          <input type="text" class="form-control" formControlName="Location">
+          <div *ngIf="classForm.get('Location')?.invalid && classForm.get('Location')?.touched" class="text-danger">
+            Location is required
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label>Duration (hours)</label>
+          <input type="number" class="form-control" formControlName="DurationInHours">
+          <div *ngIf="classForm.get('DurationInHours')?.invalid && classForm.get('DurationInHours')?.touched" class="text-danger">
+            Valid duration required
+          </div>
+        </div>
+        <div class="form-group col-md-4">
+          <label>Fee</label>
+          <input type="number" class="form-control" formControlName="Fee">
+          <div *ngIf="classForm.get('Fee')?.invalid && classForm.get('Fee')?.touched" class="text-danger">
+            Valid fee required
+          </div>
+        </div>
+        <div class="form-group col-md-4">
+          <label>Skill Level</label>
+          <input type="text" class="form-control" formControlName="SkillLevel">
+          <div *ngIf="classForm.get('SkillLevel')?.invalid && classForm.get('SkillLevel')?.touched" class="text-danger">
+            Skill Level is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Ingredients Provided</label>
+        <textarea class="form-control" formControlName="IngredientsProvided"></textarea>
+        <div *ngIf="classForm.get('IngredientsProvided')?.invalid && classForm.get('IngredientsProvided')?.touched" class="text-danger">
+          Ingredients Provided is required
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Special Requirements</label>
+        <textarea class="form-control" formControlName="SpecialRequirements"></textarea>
+        <div *ngIf="classForm.get('SpecialRequirements')?.invalid && classForm.get('SpecialRequirements')?.touched" class="text-danger">
+          Special Requirements is required
+        </div>
+      </div>
+      <div class="text-danger" *ngIf="error">{{error}}</div>
+      <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+</div>

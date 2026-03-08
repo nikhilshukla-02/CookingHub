@@ -1,0 +1,47 @@
+<div class="container mt-4">
+ 
+  <h2 class="page-title">Available Classes</h2>
+ 
+  <!-- Search -->
+  <div class="mb-4">
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Search by Class Name"
+      [(ngModel)]="searchText"
+      (input)="filter()"
+    />
+  </div>
+ 
+  <!-- Cards -->
+  <div class="row" *ngIf="filteredClasses.length > 0; else noData">
+ 
+    <div class="col-md-4 mb-4" *ngFor="let c of filteredClasses">
+ 
+      <div class="class-card">
+ 
+        <h5 class="card-title">{{c.ClassName}}</h5>
+ 
+        <p>🍽 <b>Cuisine:</b> {{c.CuisineType}}</p>
+        <p>👨‍🍳 <b>Chef:</b> {{c.ChefName}}</p>
+        <p>📍 <b>Location:</b> {{c.Location}}</p>
+        <p>⏰ <b>Duration:</b> {{c.DurationInHours}} hrs</p>
+        <p>💰 <b>Fee:</b> {{c.Fee | currency}}</p>
+        <p>⭐ <b>Skill Level:</b> {{c.SkillLevel}}</p>
+ 
+        <button class="apply-btn" (click)="apply(c.CookingClassId)">
+          Apply
+        </button>
+ 
+      </div>
+ 
+    </div>
+ 
+  </div>
+ 
+  <ng-template #noData>
+    <p>No classes available</p>
+  </ng-template>
+ 
+</div>
+ 

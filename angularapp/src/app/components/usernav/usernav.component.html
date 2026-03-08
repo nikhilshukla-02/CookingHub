@@ -1,0 +1,31 @@
+  
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/home">Cooking Hub (User)</a>
+
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" routerLink="/home" routerLinkActive="active">Home</a>
+      <a class="nav-item nav-link" routerLink="/user/cooking-imp">Importance of Cooking</a>
+      <a class="nav-item nav-link" routerLink="/user/view-classes">Cooking Classes</a>
+      <a class="nav-item nav-link" routerLink="/user/my-requests">Applied Class Requests</a>
+
+      <!-- Dropdown -->
+      <div class="nav-item dropdown">
+        <!-- IMPORTANT: Use data-bs-toggle for Bootstrap 5; use data-toggle for Bootstrap 4 -->
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+          Feedback
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" routerLink="/user/add-feedback">Post Feedback</a>
+          <a class="dropdown-item" routerLink="/user/my-feedbacks">My Feedbacks</a>
+        </div>
+      </div>
+
+      <a class="nav-item nav-link" style="cursor:pointer;" (click)="logout()">Logout</a>
+    </div>
+
+    <span class="navbar-text text-white" *ngIf="user">
+      Welcome {{user.username}} ({{user.role}})
+    </span>
+  </div>
+</nav>

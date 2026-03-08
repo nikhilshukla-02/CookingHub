@@ -1,0 +1,79 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+.bg-image {
+    /* Fixed: Combined gradient and image so both work */
+    background: url("/assets/cooking-imp.webp");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Keeps bg steady while scrolling */
+    min-height: 100vh;
+}
+/* Main Container */
+.container{
+    width: 70%;
+    margin: auto;
+    margin-top: 0;
+    padding: 30px;
+    border-radius: 12px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;     
+}
+ 
+/* Page Title */
+.title{
+    text-align: center;
+    color: #e67e22;
+    font-size: 32px;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+ 
+/* Section Cards */
+.section{
+    background: #fff5ec;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-left: 6px solid #e67e22;
+    border-radius: 8px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+ 
+/* Hover Effect */
+.section:hover{
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 18px rgba(0,0,0,0.15);
+}
+ 
+/* Section Headings */
+.section h4{
+    color: #d35400;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+ 
+/* Paragraph Styling */
+.section p{
+    color: #555;
+    line-height: 1.7;
+    font-size: 15px;
+}
+ 
+/* Quote Styling */
+.quote{
+    margin-top: 25px;
+    padding: 15px 20px;
+    background: #fff0e0;
+    border-left: 6px solid #e67e22;
+    font-style: italic;
+    color: #444;
+    border-radius: 6px;
+}
+ 
+/* Responsive */
+@media (max-width:768px){
+    .container{
+        width: 90%;
+    }
+}

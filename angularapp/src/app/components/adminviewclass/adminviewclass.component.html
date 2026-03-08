@@ -1,0 +1,40 @@
+<div class="container mt-4">
+    <h3>Cooking Classes</h3>
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Search by Class Name" [(ngModel)]="searchText" (input)="filter()">
+    </div>
+    <table class="table table-bordered" *ngIf="filteredClasses.length > 0; else noData">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Class Name</th>
+          <th>Cuisine</th>
+          <th>Chef</th>
+          <th>Location</th>
+          <th>Duration</th>
+          <th>Fee</th>
+          <th>Skill Level</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of filteredClasses">
+          <td>{{c.CookingClassId}}</td>
+          <td>{{c.ClassName}}</td>
+          <td>{{c.CuisineType}}</td>
+          <td>{{c.ChefName}}</td>
+          <td>{{c.Location}}</td>
+          <td>{{c.DurationInHours}} hrs</td>
+          <td>{{c.Fee | currency}}</td>
+          <td>{{c.SkillLevel}}</td>
+          <td>
+            <button class="btn btn-sm btn-primary" (click)="editClass(c.CookingClassId!)">Edit</button>
+            <button class="btn btn-sm btn-danger ml-1" (click)="deleteClass(c.CookingClassId!)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #noData>
+      <p class="text-muted">Oops! No records found</p>
+    </ng-template>
+</div>

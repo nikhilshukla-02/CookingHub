@@ -1,0 +1,66 @@
+<div class="chatbot-wrapper">
+
+    <!-- Floating Button -->
+    <button class="chatbot-fab" (click)="toggle()" [title]="isOpen ? 'Close chat' : 'Open chat'">
+      <span *ngIf="!isOpen">💬</span>
+      <span *ngIf="isOpen">✕</span>
+    </button>
+  
+    <!-- Chat Window -->
+    <div class="chatbot-window" *ngIf="isOpen">
+  
+      <!-- Header -->
+      <div class="chatbot-header">
+        <div class="header-info">
+          <span class="header-icon">🍳</span>
+          <div>
+            <div class="header-title">Cooking Hub Assistant</div>
+            <div class="header-sub">Ask me anything!</div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Messages -->
+      <div class="chatbot-body" #chatBody>
+        <div *ngFor="let msg of messages"
+             [ngClass]="msg.sender === 'user' ? 'msg-row msg-user' : 'msg-row msg-bot'">
+          <div class="bubble">{{ msg.text }}</div>
+          <small class="msg-time">{{ msg.time | date:'shortTime' }}</small>
+        </div>
+  
+        <!-- Typing Indicator -->
+        <div class="msg-row msg-bot" *ngIf="isTyping">
+          <div class="bubble typing-indicator">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Quick Replies -->
+      <div class="quick-replies">
+        <button
+          *ngFor="let q of quickReplies"
+          class="quick-btn"
+          (click)="useQuickReply(q)"
+          [disabled]="isTyping">
+          {{ q }}
+        </button>
+      </div>
+  
+      <!-- Input -->
+      <div class="chatbot-footer">
+        <input
+          type="text"
+          class="chat-input"
+          [(ngModel)]="userInput"
+          (keydown)="onEnter($event)"
+          placeholder="Ask about classes, BMI, calories..."
+          [disabled]="isTyping"
+        />
+        <button class="send-btn" (click)="sendMessage()" [disabled]="isTyping || !userInput.trim()">
+          ➤
+        </button>
+      </div>
+  
+    </div>
+  </div>

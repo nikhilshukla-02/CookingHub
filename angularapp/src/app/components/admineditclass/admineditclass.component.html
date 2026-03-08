@@ -1,0 +1,51 @@
+<div class="container mt-4">
+    <h3>Edit Cooking Class</h3>
+    <form [formGroup]="classForm" (ngSubmit)="onSubmit()">
+      <!-- same fields as add class -->
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>Class Name</label>
+          <input type="text" class="form-control" formControlName="ClassName">
+        </div>
+        <div class="form-group col-md-6">
+          <label>Cuisine Type</label>
+          <input type="text" class="form-control" formControlName="CuisineType">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>Chef Name</label>
+          <input type="text" class="form-control" formControlName="ChefName">
+        </div>
+        <div class="form-group col-md-6">
+          <label>Location</label>
+          <input type="text" class="form-control" formControlName="Location">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label>Duration (hours)</label>
+          <input type="number" class="form-control" formControlName="DurationInHours">
+        </div>
+        <div class="form-group col-md-4">
+          <label>Fee</label>
+          <input type="number" class="form-control" formControlName="Fee">
+        </div>
+        <div class="form-group col-md-4">
+          <label>Skill Level</label>
+          <input type="text" class="form-control" formControlName="SkillLevel">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Ingredients Provided</label>
+        <textarea class="form-control" formControlName="IngredientsProvided"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Special Requirements</label>
+        <textarea class="form-control" formControlName="SpecialRequirements"></textarea>
+      </div>
+      <div class="text-danger" *ngIf="error">{{error}}</div>
+      <button type="submit" class="btn btn-success">Update Class</button>
+      <button type="button" class="btn btn-secondary ml-2" (click)="goBack()">Back</button>
+    </form>
+</div>

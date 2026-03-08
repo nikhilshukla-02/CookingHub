@@ -1,0 +1,21 @@
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" routerLink="/home">Cooking Hub (Admin)</a>
+      <div class="navbar-nav">
+        <a class="nav-item nav-link" routerLink="/home" routerLinkActive="active">Home</a>
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown">Cooking Class</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" routerLink="/admin/add-class">Add Class</a>
+            <a class="dropdown-item" routerLink="/admin/view-class">View Class</a>
+          </div>
+        </div>
+        <a class="nav-item nav-link" routerLink="/admin/view-requests">Class Requests for Approval</a>
+        <a class="nav-item nav-link" routerLink="/admin/view-feedbacks">Feedbacks</a>
+        <a class="nav-item nav-link" style="cursor:pointer;" (click)="logout()">Logout</a>
+      </div>
+      <span class="navbar-text text-white" *ngIf="user">
+        Welcome {{user.username}} ({{user.role}})
+      </span>
+    </div>
+</nav>

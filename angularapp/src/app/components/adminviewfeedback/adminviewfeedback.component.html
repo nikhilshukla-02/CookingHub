@@ -1,0 +1,14 @@
+<div class="container mt-4">
+  <h3>Feedback Details</h3>
+  <div *ngIf="feedbacks.length > 0; else noData">
+    <div class="card mb-2" *ngFor="let fb of feedbacks">
+      <div class="card-body">
+        <h6>User ID: {{fb.UserId}} | Date: {{fb.Date | date:'medium'}}</h6>
+        <p>{{fb.FeedbackText}}</p>
+      </div>
+    </div>
+  </div>
+  <ng-template #noData>
+    <p class="text-muted">No data found</p>
+  </ng-template>
+</div>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Cooking Hub</title>
+  
+      <!-- Bootstrap 5 CDN -->
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+      <style>
+          .hero-section {
+              background: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1400&q=80') 
+                          center/cover no-repeat;
+              height: 80vh;
+              display: flex;
+              align-items: center;
+              color: white;
+              position: relative;
+          }
+          .hero-overlay {
+              background: rgba(0, 0, 0, 0.55);
+              position: absolute;
+              inset: 0;
+          }
+          .hero-content {
+              position: relative;
+              z-index: 2;
+          }
+
+          .col-md-4{
+            background-color: white;
+          }
+      </style>
+  </head>
+  
+  <body>
+      <section class="hero-section">
+          <div class="hero-overlay"></div>
+  
+          <div class="container hero-content">
+              <h1 class="display-4 fw-bold mb-3">Welcome to Cooking Hub</h1>
+              <p class="lead mb-4">
+                  Your destination for culinary learning. Join exciting cooking classes, 
+                  request personalized sessions, and share your food journey.
+              </p>
+  
+          </div>
+      </section>
+  
+      <!-- Features Section -->
+      <section>
+          <div class="container text-center">
+              <h2 class="fw-bold mb-4">Why Choose Cooking Hub?</h2>
+  
+              <div class="row g-4">
+                  <div class="col-md-4">
+                      <div class="p-4 border rounded shadow-sm">
+                          <h5 class="fw-bold">🍳 Learn from Experts</h5>
+                          <p>Professional chefs ready to guide you through every recipe.</p>
+                      </div>
+                  </div>
+  
+                  <div class="col-md-4">
+                      <div class="p-4 border rounded shadow-sm">
+                          <h5 class="fw-bold">📚 Variety of Classes</h5>
+                          <p>Indian, Italian, baking, desserts & more — all in one place.</p>
+                      </div>
+                  </div>
+  
+                  <div class="col-md-4">
+                      <div class="p-4 border rounded shadow-sm">
+                          <h5 class="fw-bold">⭐ Share Your Experience</h5>
+                          <p>Submit feedback and help us improve the platform.</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </section>
+  
+      <!-- Footer -->
+      <footer class="bg-dark text-white text-center py-3">
+          © 2026 Cooking Hub — All Rights Reserved
+      </footer>
+  
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+  </html>
+  

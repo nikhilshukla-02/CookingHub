@@ -1,0 +1,13 @@
+<div class="container mt-4">
+    <h3>Add Feedback</h3>
+    <form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Your Feedback</label>
+        <textarea class="form-control" rows="4" formControlName="FeedbackText"></textarea>
+        <div *ngIf="feedbackForm.get('FeedbackText')?.invalid && feedbackForm.get('FeedbackText')?.touched" class="text-danger">
+          Feedback text is required
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" [disabled]="feedbackForm.invalid">Submit</button>
+    </form>
+  </div>

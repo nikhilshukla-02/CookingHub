@@ -1,0 +1,14 @@
+<ng-container *ngIf="auth.currentUser | async as user; else publicNavbar">
+    <app-adminnav *ngIf="user?.role === 'admin'"></app-adminnav>
+    <app-usernav  *ngIf="user?.role === 'user'"></app-usernav>
+  
+    <!-- If logged in but no role in token -->
+    <app-navbar *ngIf="user && !user.role"></app-navbar>
+  </ng-container>
+  
+  <ng-template #publicNavbar>
+    <app-navbar></app-navbar>
+  </ng-template>
+  
+  <router-outlet></router-outlet>
+  <app-chatbot></app-chatbot>
