@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
- 
+import { AgGridModule } from 'ag-grid-angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -24,7 +24,6 @@ import { UserviewfeedbackComponent } from './components/userviewfeedback/uservie
 import { CookingImpComponent } from './components/cooking-imp/cooking-imp.component';
 import { ErrorComponent } from './components/error/error.component';
 import { ChatbotComponent } from './components/chatbot/chatbot.component';
-import { UserHomeComponent } from './components/user-home/user-home.component';
 
  
 @NgModule({
@@ -48,15 +47,15 @@ import { UserHomeComponent } from './components/user-home/user-home.component';
     UserviewfeedbackComponent,
     CookingImpComponent,
     ErrorComponent,
-    ChatbotComponent,
-    UserHomeComponent,
+    ChatbotComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    AgGridModule
   ],
   providers: [],
   bootstrap: [AppComponent]
