@@ -35,52 +35,36 @@ namespace dotnetapp.Services
                 .ToListAsync();
         }
 
-        // 3. Add Cooking Class Request with Duplicate Check
-       // Inside dotnetapp.Services.CookingClassRequestService
-public async Task<bool> AddCookingClassRequest(CookingClassRequest request)
-{
-    // Check if User exists
-    var userExists = await _context.Users.AnyAsync(u => u.UserId == request.UserId);
-    if (!userExists)
-        throw new CookingClassException($"User with ID {request.UserId} does not exist.");
+        // 3. Add Cooking Class Request — UserId already set from JWT in controller
+        public async Task<bool> AddCookingClassRequest(CookingClassRequest request)
+        {
+            var userExists = await _context.Users.AnyAsync(u => u.UserId == request.UserId);
+            if (!userExists)
+                throw new CookingClassException($"User with ID {request.UserId} does not exist.");
 
-    // Check if Class exists
-    var classExists = await _context.CookingClasses.AnyAsync(c => c.CookingClassId == request.CookingClassId);
-    if (!classExists)
-        throw new CookingClassException($"Cooking Class with ID {request.CookingClassId} does not exist.");
+            var classExists = await _context.CookingClasses.AnyAsync(c => c.CookingClassId == request.CookingClassId);
+            if (!classExists)
+                throw new CookingClassException($"Cooking Class with ID {request.CookingClassId} does not exist.");
 
-    // Duplicate check
-    var exists = await _context.CookingClassRequests
-        .AnyAsync(r => r.CookingClassId == request.CookingClassId && r.UserId == request.UserId);
+            var exists = await _context.CookingClassRequests
+                .AnyAsync(r => r.CookingClassId == request.CookingClassId && r.UserId == request.UserId);
+            if (exists)
+                throw new CookingClassException("User already requested this cooking class");
 
-    if (exists)
-        throw new CookingClassException("User already requested this cooking class");
+            await _context.CookingClassRequests.AddAsync(request);
+            await _context.SaveChangesAsync();
+            return true;
+        }
 
-    await _context.CookingClassRequests.AddAsync(request);
-    await _context.SaveChangesAsync();
-    return true;
-}
-
-
-        // 4. Update Cooking Class Request
+        // 4. Update Cooking Class Request — Admin can only update Status
         public async Task<bool> UpdateCookingClassRequest(int requestId, CookingClassRequest request)
         {
             var existingRequest = await _context.CookingClassRequests.FindAsync(requestId);
-            
-            if (existingRequest == null)
-            {
-                return false;
-            }
 
-            // Update properties
-            existingRequest.UserId = request.UserId;
-            existingRequest.CookingClassId = request.CookingClassId;
-            existingRequest.RequestDate = request.RequestDate;
+            if (existingRequest == null)
+                return false;
+
             existingRequest.Status = request.Status;
-            existingRequest.DietaryPreferences = request.DietaryPreferences;
-            existingRequest.CookingGoals = request.CookingGoals;
-            existingRequest.Comments = request.Comments; // Assuming a status field exists
-            // Add other relevant fields from your model here
 
             _context.CookingClassRequests.Update(existingRequest);
             await _context.SaveChangesAsync();
@@ -91,13 +75,38 @@ public async Task<bool> AddCookingClassRequest(CookingClassRequest request)
         public async Task<bool> DeleteCookingClassRequest(int requestId)
         {
             var request = await _context.CookingClassRequests.FindAsync(requestId);
-            
+
             if (request == null)
-            {
                 return false;
-            }
 
             _context.CookingClassRequests.Remove(request);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        // 6. Patch Cooking Class Request — User only, Status is never updated
+        public async Task<bool> PatchCookingClassRequest(int requestId, int userId, CookingClassRequest patchRequest)
+        {
+            var existingRequest = await _context.CookingClassRequests.FindAsync(requestId);
+
+            if (existingRequest == null)
+                return false;
+
+            if (existingRequest.UserId != userId)
+                throw new CookingClassException("You are not authorized to update this request.");
+
+            // Only these 4 fields are updated — Status is intentionally never touched
+
+            if (patchRequest.DietaryPreferences != null)
+                existingRequest.DietaryPreferences = patchRequest.DietaryPreferences;
+
+            if (patchRequest.CookingGoals != null)
+                existingRequest.CookingGoals = patchRequest.CookingGoals;
+
+            if (patchRequest.Comments != null)
+                existingRequest.Comments = patchRequest.Comments;
+
+            _context.CookingClassRequests.Update(existingRequest);
             await _context.SaveChangesAsync();
             return true;
         }
