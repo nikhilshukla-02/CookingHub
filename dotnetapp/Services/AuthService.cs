@@ -19,17 +19,20 @@ namespace dotnetapp.Services
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _context;
+        private readonly IEmailService _emailService;   // NEW
 
         public AuthService(
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IConfiguration configuration,
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            IEmailService emailService)   // ADDED emailService parameter
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             _configuration = configuration;
             _context = context;
+            _emailService = emailService;   // INITIALIZE
         }
 
         public async Task<(int, string)> Registration(User model, string role)
@@ -42,8 +45,8 @@ namespace dotnetapp.Services
             }
 
             // Truncate Name to 30 characters if longer
-            string truncatedName = model.Username.Length > 30 
-                ? model.Username.Substring(0, 30) 
+            string truncatedName = model.Username.Length > 30
+                ? model.Username.Substring(0, 30)
                 : model.Username;
 
             // Create ApplicationUser (Identity user)
@@ -71,67 +74,97 @@ namespace dotnetapp.Services
             // Assign role to the user
             await userManager.AddToRoleAsync(appUser, role);
 
-            // Also save user info in the custom Users table
+            // NEW: Generate verification token
+            string verificationToken = Guid.NewGuid().ToString();
+
+            // Also save user info in the custom Users table (with verification fields)
             var dbUser = new User
             {
                 Email = model.Email,
                 Password = model.Password,
                 Username = model.Username,
                 MobileNumber = model.MobileNumber,
-                UserRole = role
+                UserRole = role,
+                IsVerified = false,
+                VerificationToken = verificationToken
             };
 
             _context.Users.Add(dbUser);
             await _context.SaveChangesAsync();
 
-            return (1, "User created successfully!");
+            // NEW: Send verification email
+            await _emailService.SendVerificationEmailAsync(model.Email, verificationToken);
+
+            return (1, "User created successfully! Please verify your email before logging in.");
         }
 
-public async Task<(int, string)> Login(LoginModel model)
-{
-    // Find user by email
-    var user = await userManager.FindByEmailAsync(model.Email);
+        public async Task<(int, string)> Login(LoginModel model)
+        {
+            // Find user by email
+            var user = await userManager.FindByEmailAsync(model.Email);
 
-    if (user == null)
-    {
-        return (0, "Invalid email");
-    }
+            if (user == null)
+            {
+                return (0, "Invalid credentials");
+            }
 
-    // Check password
-    if (!await userManager.CheckPasswordAsync(user, model.Password))
-    {
-        return (0, "Invalid password");
-    }
+            // Check password
+            if (!await userManager.CheckPasswordAsync(user, model.Password))
+            {
+                return (0, "Invalid password");
+            }
 
-    // Get user roles
-    var userRoles = await userManager.GetRolesAsync(user);
+            // ✅ Fetch the custom User to check verification and get UserId
+            var customUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+            if (customUser == null)
+            {
+                return (0, "User profile not found");
+            }
 
-    // ✅ Fetch the custom User to get the integer UserId
-    var customUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
-    if (customUser == null)
-    {
-        return (0, "User profile not found");
-    }
+            // NEW: Check if email is verified
+            if (!customUser.IsVerified)
+            {
+                return (0, "Please verify your email first.");
+            }
 
-    // Build claims
-    var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.Name, user.Name),
-        new Claim(ClaimTypes.Email, user.Email),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim("UserId", customUser.UserId.ToString())   // ✅ ADD THIS
-    };
+            // Get user roles
+            var userRoles = await userManager.GetRolesAsync(user);
 
-    foreach (var role in userRoles)
-    {
-        claims.Add(new Claim(ClaimTypes.Role, role));
-    }
+            // Build claims
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("UserId", customUser.UserId.ToString())
+            };
 
-    // Generate JWT token
-    string token = GenerateToken(claims);
+            foreach (var role in userRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
-    return (1, token);
-}
+            // Generate JWT token
+            string token = GenerateToken(claims);
+
+            return (1, token);
+        }
+
+        // NEW: VerifyEmail method
+        public async Task<(int, string)> VerifyEmail(string token)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.VerificationToken == token);
+            if (user == null)
+            {
+                return (0, "Invalid or expired token");
+            }
+
+            user.IsVerified = true;
+            user.VerificationToken = null; // token used once
+            await _context.SaveChangesAsync();
+
+            return (1, "Email verified successfully. You can now login.");
+        }
 
         private string GenerateToken(IEnumerable<Claim> claims)
         {
