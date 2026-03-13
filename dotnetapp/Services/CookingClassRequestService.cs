@@ -95,7 +95,9 @@ namespace dotnetapp.Services
             if (existingRequest.UserId != userId)
                 throw new CookingClassException("You are not authorized to update this request.");
 
-            // Only these 4 fields are updated — Status is intentionally never touched
+            // FIX: RequestDate was missing — now all 4 editable fields are updated
+            if (patchRequest.RequestDate != null)
+                existingRequest.RequestDate = patchRequest.RequestDate;
 
             if (patchRequest.DietaryPreferences != null)
                 existingRequest.DietaryPreferences = patchRequest.DietaryPreferences;
